@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -25,13 +26,13 @@ public class Customer {
 
     @CreationTimestamp
     @CreatedDate
-    private java.sql.Timestamp createdAt;
+    private Date createdAt;
 
     @OneToMany(mappedBy = "customer")
     private List<CustomerComment> comments;
 
 
-    protected Customer() {
+    public Customer() {
     }
 
     public Customer(String name, String email){
@@ -63,12 +64,8 @@ public class Customer {
         this.email = email;
     }
 
-    public Timestamp getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
     }
 
     public List<CustomerComment> getComments() {
@@ -77,5 +74,14 @@ public class Customer {
 
     public void setComments(List<CustomerComment> comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

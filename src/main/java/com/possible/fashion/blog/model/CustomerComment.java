@@ -56,9 +56,6 @@ public class CustomerComment {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
-    }
 
     public Product getProduct() {
         return product;
@@ -74,5 +71,14 @@ public class CustomerComment {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+
+    @Override
+    public String toString() {
+        return "CustomerComment{" +
+                "comment='" + comment + '\'' +
+                ", dateCreated=" + dateCreated +
+                '}';
     }
 }

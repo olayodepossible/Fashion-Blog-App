@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -21,12 +22,12 @@ public class Product {
 
     @CreationTimestamp
     @CreatedDate
-    private java.sql.Timestamp createdAt;
+    private Date createdAt;
 
     @OneToMany(mappedBy = "product")
     private List<CustomerComment> comments;
 
-    protected Product() {
+    public Product() {
     }
 
     public Product(String imageSrc){
@@ -45,7 +46,7 @@ public class Product {
         this.imageSrc = imageSrc;
     }
 
-    public Timestamp getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
@@ -57,5 +58,13 @@ public class Product {
         this.comments = comments;
     }
 
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "imageSrc='" + imageSrc + '\'' +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
 
