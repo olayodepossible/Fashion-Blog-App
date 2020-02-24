@@ -1,7 +1,9 @@
 package com.possible.fashion.blog.model;
 
-import net.minidev.json.annotate.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -9,7 +11,8 @@ import javax.validation.constraints.NotNull;
 import java.sql.Date;
 
 @Entity
-public class CustomerComment {
+@Table(name = "comments")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -22,17 +25,21 @@ public class CustomerComment {
     private Date dateCreated;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Product product;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Customer customer;
 
-    protected CustomerComment() {
+
+    protected Comment() {
     }
 
-    public CustomerComment(String comment){
+    public Comment(String comment) {
         this.comment = comment;
     }
 
@@ -57,17 +64,21 @@ public class CustomerComment {
     }
 
 
+
     public Product getProduct() {
         return product;
     }
+
 
     public void setProduct(Product product) {
         this.product = product;
     }
 
+
     public Customer getCustomer() {
         return customer;
     }
+
 
     public void setCustomer(Customer customer) {
         this.customer = customer;

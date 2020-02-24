@@ -2,13 +2,12 @@ package com.possible.fashion.blog.service;
 
 import com.possible.fashion.blog.exception.ResourceNotFoundException;
 import com.possible.fashion.blog.model.Customer;
-import com.possible.fashion.blog.model.CustomerComment;
+import com.possible.fashion.blog.model.Comment;
 import com.possible.fashion.blog.model.Product;
 import com.possible.fashion.blog.repository.CommentRepository;
 import com.possible.fashion.blog.repository.CustomerRepository;
 import com.possible.fashion.blog.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -59,13 +58,10 @@ public class ProductService {
 
     }
 
-    public Map<String, Boolean> deleteProduct(Long id){
+    public Boolean deleteProduct(Long id){
         Product productFound =  productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("The required Resource is not found"));
         productRepository.delete(productFound);
-
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("delete", Boolean.TRUE);
-        return response;
+        return true;
     }
 
     /*  Customer Service*/
@@ -89,36 +85,42 @@ public class ProductService {
 
     }
 
-    public Map<String, Boolean> deleteCustomer(Long id){
+    public Boolean deleteCustomer(Long id){
         Customer customerFound = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("The required Resource is not found"));
         customerRepository.delete(customerFound);
-
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("delete", Boolean.TRUE);
-        return response;
+        return true;
     }
 
     /* Customer's Comment Service*/
 
-    public CustomerComment createPost(Long id, CustomerComment post){
-        Product product = findProductById(id);
+    public Comment createPost(Long product_id, Long customer_id, Comment post){
+        Product product = productRepository.findById(product_id).orElseThrow(() -> new ResourceNotFoundException("The Product does not exit"));
         post.setProduct(product);
+
+        Customer customer = customerRepository.findById(customer_id).orElseThrow(() -> new ResourceNotFoundException("No comment from this resource"));
+        post.setCustomer(customer);
         return  commentRepository.save(post);
     }
 
-    public CustomerComment updatePost(CustomerComment postToUpdate, Long id){
-        Product productFound = findProductById(id);
-        CustomerComment updatedPost =  productFound.getComments().get( postToUpdate.getId().intValue());
+    //Fetch All the post for Specific customer
+    public List<Comment> getCommentByCustomerId(Long id){
+        return commentRepository.findCommentByCustomerId(id);
+    }
+
+    public List<Comment> findCommentByProductId(Long id){
+        return commentRepository.findCommentByProductId(id);
+    }
+
+    public Comment updatePost(Long id, Comment postToUpdate){
+        Comment updatedPost = commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("The Product does not exit"));
         updatedPost.setComment(postToUpdate.getComment());
         return commentRepository.save(updatedPost);
     }
 
-    public Map<String, Boolean> deletePost(Long id){
-       CustomerComment postFound =  commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("The required Resource is not found"));
+    public Boolean deletePost(Long id){
+        Comment postFound =  commentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("The required Resource is not found"));
         commentRepository.delete(postFound);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("delete", Boolean.TRUE);
-        return response;
+        return true;
     }
 
 }

@@ -7,10 +7,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
+@Table(name = "customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,10 +26,6 @@ public class Customer {
     @CreationTimestamp
     @CreatedDate
     private Date createdAt;
-
-    @OneToMany(mappedBy = "customer")
-    private List<CustomerComment> comments;
-
 
     public Customer() {
     }
@@ -66,14 +61,6 @@ public class Customer {
 
     public Date getCreatedAt() {
         return createdAt;
-    }
-
-    public List<CustomerComment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CustomerComment> comments) {
-        this.comments = comments;
     }
 
     @Override
